@@ -1,5 +1,4 @@
-# BR2K-service web server framework
-
+# br2k-app: web server framework with br2k schema
 Hello
 
 
