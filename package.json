@@ -1,7 +1,7 @@
 {
   "name": "br2k-app",
-  "version": "1.0.7",
-  "description": "service-Replication state & Recovery support framework",
+  "version": "1.0.8",
+  "description": "web server framework with br2k schema",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
