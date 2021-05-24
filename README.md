@@ -1,5 +1,4 @@
 # br2k-app: web server framework with br2k schema
-Hello
 
 
 # quick-start
