@@ -1,5 +1,8 @@
 # br2k-app: web server framework with br2k schema
+<<<<<<< HEAD
 
+=======
+>>>>>>> 07641f377e8a79ed9c8074a9b4b296fe68f058bb
 
 
 # quick-start
