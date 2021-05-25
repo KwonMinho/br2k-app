@@ -216,13 +216,12 @@ app.replicate('POST','/user', (req,res)=>{
 });
 ```
 
+# check list
 
-# current test
+## 1. State folder permission
+<br>
+The permission of all files in state folder must be 766
 
-- leader test (o)
-- fatal consistency test (o, local processing memo)
-- follower test (o)
-- ethereum service registry test(x)
-- disater test
-1. 재난 상황시에 복제가 잘되는가
-2. 백업 과정
+```
+chmod -R 766 PROJECT_ROOT_PATH/state
+```
