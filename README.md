@@ -225,3 +225,17 @@ The permission of all files in state folder must be 766
 ```
 chmod -R 766 PROJECT_ROOT_PATH/state
 ```
+
+
+# dev-env
+
+nodejs: v14.15.3
+
+npm: 7.10.0
+
+etcd: v3.2
+
+core npm modules:
+- express: 4.17.1
+- web3: 1.3.6 //ethereum client
+- etcd3: 1.0.1
