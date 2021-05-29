@@ -1,0 +1,30 @@
+{
+    start: '2021-5-26 8:33:12:447',
+    end: '2021-5-26 8:33:59:443',
+    version: 3,
+    services: [
+      [ 'http://192.168.205.13' ],
+      [ 'http://192.168.205.10' ],
+      [ 'http://192.168.205.12' ],
+      [ 'http://192.168.205.14' ],
+      [ 'http://192.168.205.11' ]
+    ],
+    'alive-services': [
+      [ 'http://192.168.205.13' ],
+      [ 'http://192.168.205.10' ],
+      [ 'http://192.168.205.12' ],
+      [ 'http://192.168.205.14' ],
+      [ 'http://192.168.205.11' ]
+    ],
+    'etcd-snapshot-size': 751800416,
+    'service-state-size': 20471706,
+    storage: {
+      host: '203.250.77.152',
+      user: 'minho',
+      password: 'pslab',
+      database: 'backup',
+      'backup-access-key': 'f42a020f4da7021a1a9e6e0b05bcf965'
+    },
+    subject: '2444505748921961198'
+  }
+  

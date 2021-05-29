@@ -1,0 +1,59 @@
+{
+    "start": "2021-5-27 23:49:34:529",
+    "end": "2021-5-27 23:50:11:610",
+    "version": 5,
+    "services": [
+        {
+            "service-id": "1275749343062029268",
+            "location": "http://192.168.205.13"
+        },
+        {
+            "service-id": "2444505748921961198",
+            "location": "http://192.168.205.10"
+        },
+        {
+            "service-id": "8194194769780209033",
+            "location": "http://192.168.205.12"
+        },
+        {
+            "service-id": "8243133932699938149",
+            "location": "http://192.168.205.14"
+        },
+        {
+            "service-id": "9661513455501429869",
+            "location": "http://192.168.205.11"
+        }
+    ],
+    "alive-services": [
+        {
+            "service-id": "1275749343062029268",
+            "location": "http://192.168.205.13"
+        },
+        {
+            "service-id": "2444505748921961198",
+            "location": "http://192.168.205.10"
+        },
+        {
+            "service-id": "8194194769780209033",
+            "location": "http://192.168.205.12"
+        },
+        {
+            "service-id": "8243133932699938149",
+            "location": "http://192.168.205.14"
+        },
+        {
+            "service-id": "9661513455501429869",
+            "location": "http://192.168.205.11"
+        }
+    ],
+    "etcd-snapshot-size": 1879621792,
+    "service-state-size": 101009045,
+    "storage": {
+        "host": "203.250.77.152",
+        "user": "minho",
+        "password": "pslab",
+        "database": "backup",
+        "backup-access-key": "6f41e75d33459b08e5499bc158fc561f"
+    },
+    "subject": "2444505748921961198"
+}

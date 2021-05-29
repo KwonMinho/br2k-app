@@ -1,0 +1,14 @@
+env
+- nodejs: v14.17.0
+- npm: 7.14.0
+- docker install
+- ldap
+docker run -p 390:389 -p 637:636 --restart=always --env LDAP_DOMAIN="verifier.com" --env LDAP_TLS=false --env LDAP_ADMIN_PASSWORD=pslab --name test-ldap -v /home/vagrant/verifier-test-br2k/state/ldap:/var/lib/ldap  --detach alsgh458/openldap:0.3.1
+
+
+test1
+- state-version-up: 10000
+  (why? state-version-up is 100000, etcd snapshot is too big...
+- reqeust: 30000
+- add member: 1
+
