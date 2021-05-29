@@ -1,6 +1,6 @@
 {
   "name": "br2k-app",
-  "version": "1.2.3",
+  "version": "1.5.6",
   "description": "web server framework with br2k schema",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,6 @@
     "etcd3": "^1.0.1",
     "eth-crypto": "^1.9.0",
     "express": "^4.17.1",
-    "flatted": "^3.0.4",
     "function-queue": "0.0.12",
     "mysql": "^2.18.1",
     "obj-watcher": "^2.0.15",

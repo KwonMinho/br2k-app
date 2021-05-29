@@ -6,27 +6,44 @@
 ```javascript
 const app = require('br2k-app')(RUNTIME_CONFIG);
 
-/*--default mode--*/
-app.replicate('POST','/user', (req,res)=>{
-  //process request
-  //return -1 (IF.failed)
+/**
+ * default mode case
+ * */
+app.defineRLE('POST','/user',(req)=>{
+  //define RLE!!
+  return rle
+}).replicate((rle, res)=>{
+    //process request
+    //return -1 (IF.failed)
 });
-app.nonReplicate('GET','/user',(req,res)=>{
+app.defineRLE('GET','/user',(req)=>{
+  //define RLE!!
+  return rle
+}).nonReplicate((rle, res)=>{
   //process request
 });
 
-/*--rollback mode--*/
-app.replicate('POST', '/user', (req,res)=>{
-  //process request
-  //return -1 (IF.failed) 
-}).backupState(req=>{
+
+/**
+ * rollback mode case
+ * */
+app.defineRLE('POST','/user',(req)=>{
+  //define RLE!!
+  return rle
+}).backupState(rle=>{
   //define state(object)
   return state
+}).replicate((rle, res)=>{
+  //process request
+  //return -1 (IF.failed) 
 }).rollback(state=>{
   //define rollback process with state(object)
 });
 
-app.nonReplicate('GET','/user',(req,res)=>{
+app.defineRLE('GET','/user',(req)=>{
+  //define RLE!!
+  return rle
+}).nonReplicate('GET','/user',(rle,res)=>{
   //process request
   //return -1 (IF.failed) 
 });
@@ -101,7 +118,7 @@ app.nonReplicate('GET','/user',(req,res)=>{
     "etcd-snapshot-size": "",  //byte
     "service-state-size": "",  //byte
     "storage":{
-        "remote": "",
+        "host": "",
         "database": "",
         "user": "",
         "password": "",
@@ -209,10 +226,10 @@ br2k request object
   }
 
 ```javascript
-app.replicate('POST','/user', (req,res)=>{
-  const subjectID = req.br2k.subject.id
-  const subjectIndex = req.br2k.subject.index;
-  const entryIndex = req.br2k.entryIndex;
+app.replicate('POST','/user', (rle,res)=>{
+  const subjectID = rle.headers.subject.id
+  const subjectIndex = rle.headers.subject.index;
+  const entryIndex = rle.headers.entryIndex;
 });
 ```
 
