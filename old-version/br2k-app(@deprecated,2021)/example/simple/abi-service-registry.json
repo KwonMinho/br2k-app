@@ -1,0 +1,701 @@
+[
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "serviceID",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "changeType",
+                "type": "string"
+            }
+        ],
+        "name": "ChangeService",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "serviceID",
+                "type": "string"
+            }
+        ],
+        "name": "NewService",
+        "type": "event"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getServiceList",
+        "outputs": [
+            {
+                "internalType": "string[]",
+                "name": "",
+                "type": "string[]"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "components": [
+                    {
+                        "components": [
+                            {
+                                "internalType": "string",
+                                "name": "id",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "address",
+                                "name": "manager",
+                                "type": "address"
+                            },
+                            {
+                                "internalType": "address",
+                                "name": "serviceAccount",
+                                "type": "address"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "companyName",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "companyEmail",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "companyContact",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "description",
+                                "type": "string"
+                            }
+                        ],
+                        "internalType": "struct ServiceRegistry.Header",
+                        "name": "header",
+                        "type": "tuple"
+                    },
+                    {
+                        "components": [
+                            {
+                                "components": [
+                                    {
+                                        "internalType": "string",
+                                        "name": "image",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "internalType": "string",
+                                        "name": "imageAccessUser",
+                                        "type": "string"
+                                    }
+                                ],
+                                "internalType": "struct ServiceRegistry.Container",
+                                "name": "ct",
+                                "type": "tuple"
+                            },
+                            {
+                                "components": [
+                                    {
+                                        "internalType": "string[]",
+                                        "name": "location",
+                                        "type": "string[]"
+                                    },
+                                    {
+                                        "internalType": "string",
+                                        "name": "accessToken",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "internalType": "string",
+                                        "name": "nodeID",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "internalType": "string",
+                                        "name": "networkID",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "internalType": "string",
+                                        "name": "serviceProtocol",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "internalType": "string[]",
+                                        "name": "servicePoints",
+                                        "type": "string[]"
+                                    },
+                                    {
+                                        "internalType": "string",
+                                        "name": "servicePort",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "internalType": "string",
+                                        "name": "nodeMountService",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "internalType": "string",
+                                        "name": "nodeMountETCD",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "internalType": "string",
+                                        "name": "secret",
+                                        "type": "string"
+                                    }
+                                ],
+                                "internalType": "struct ServiceRegistry.KubeContext",
+                                "name": "kct",
+                                "type": "tuple"
+                            }
+                        ],
+                        "internalType": "struct ServiceRegistry.Runtime",
+                        "name": "runtime",
+                        "type": "tuple"
+                    },
+                    {
+                        "components": [
+                            {
+                                "internalType": "string[]",
+                                "name": "logs",
+                                "type": "string[]"
+                            }
+                        ],
+                        "internalType": "struct ServiceRegistry.Backup",
+                        "name": "backup",
+                        "type": "tuple"
+                    },
+                    {
+                        "internalType": "enum ServiceRegistry.State",
+                        "name": "state",
+                        "type": "uint8"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "curReplicas",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "serviceLocationIndex",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "serviceStartTime",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "serviceEndTime",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct ServiceRegistry.Service",
+                "name": "service",
+                "type": "tuple"
+            }
+        ],
+        "name": "register",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "id",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "secret",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "replicas",
+                "type": "uint256"
+            }
+        ],
+        "name": "startService",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "id",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "replicas",
+                "type": "uint256"
+            }
+        ],
+        "name": "updateReplicas",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "id",
+                "type": "string"
+            }
+        ],
+        "name": "getService",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "components": [
+                            {
+                                "internalType": "string",
+                                "name": "id",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "address",
+                                "name": "manager",
+                                "type": "address"
+                            },
+                            {
+                                "internalType": "address",
+                                "name": "serviceAccount",
+                                "type": "address"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "companyName",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "companyEmail",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "companyContact",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "description",
+                                "type": "string"
+                            }
+                        ],
+                        "internalType": "struct ServiceRegistry.Header",
+                        "name": "header",
+                        "type": "tuple"
+                    },
+                    {
+                        "components": [
+                            {
+                                "components": [
+                                    {
+                                        "internalType": "string",
+                                        "name": "image",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "internalType": "string",
+                                        "name": "imageAccessUser",
+                                        "type": "string"
+                                    }
+                                ],
+                                "internalType": "struct ServiceRegistry.Container",
+                                "name": "ct",
+                                "type": "tuple"
+                            },
+                            {
+                                "components": [
+                                    {
+                                        "internalType": "string[]",
+                                        "name": "location",
+                                        "type": "string[]"
+                                    },
+                                    {
+                                        "internalType": "string",
+                                        "name": "accessToken",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "internalType": "string",
+                                        "name": "nodeID",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "internalType": "string",
+                                        "name": "networkID",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "internalType": "string",
+                                        "name": "serviceProtocol",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "internalType": "string[]",
+                                        "name": "servicePoints",
+                                        "type": "string[]"
+                                    },
+                                    {
+                                        "internalType": "string",
+                                        "name": "servicePort",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "internalType": "string",
+                                        "name": "nodeMountService",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "internalType": "string",
+                                        "name": "nodeMountETCD",
+                                        "type": "string"
+                                    },
+                                    {
+                                        "internalType": "string",
+                                        "name": "secret",
+                                        "type": "string"
+                                    }
+                                ],
+                                "internalType": "struct ServiceRegistry.KubeContext",
+                                "name": "kct",
+                                "type": "tuple"
+                            }
+                        ],
+                        "internalType": "struct ServiceRegistry.Runtime",
+                        "name": "runtime",
+                        "type": "tuple"
+                    },
+                    {
+                        "components": [
+                            {
+                                "internalType": "string[]",
+                                "name": "logs",
+                                "type": "string[]"
+                            }
+                        ],
+                        "internalType": "struct ServiceRegistry.Backup",
+                        "name": "backup",
+                        "type": "tuple"
+                    },
+                    {
+                        "internalType": "enum ServiceRegistry.State",
+                        "name": "state",
+                        "type": "uint8"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "curReplicas",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "serviceLocationIndex",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "serviceStartTime",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "serviceEndTime",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct ServiceRegistry.Service",
+                "name": "service",
+                "type": "tuple"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "id",
+                "type": "string"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "string[]",
+                        "name": "location",
+                        "type": "string[]"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "accessToken",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "nodeID",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "networkID",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "serviceProtocol",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string[]",
+                        "name": "servicePoints",
+                        "type": "string[]"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "servicePort",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "nodeMountService",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "nodeMountETCD",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "secret",
+                        "type": "string"
+                    }
+                ],
+                "internalType": "struct ServiceRegistry.KubeContext",
+                "name": "kubeContext",
+                "type": "tuple"
+            }
+        ],
+        "name": "updateKubeContext",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "id",
+                "type": "string"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "string",
+                        "name": "image",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "imageAccessUser",
+                        "type": "string"
+                    }
+                ],
+                "internalType": "struct ServiceRegistry.Container",
+                "name": "container",
+                "type": "tuple"
+            }
+        ],
+        "name": "updateContainer",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "id",
+                "type": "string"
+            }
+        ],
+        "name": "pauseService",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "id",
+                "type": "string"
+            }
+        ],
+        "name": "stopService",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "id",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "log",
+                "type": "string"
+            }
+        ],
+        "name": "backupLog",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "id",
+                "type": "string"
+            }
+        ],
+        "name": "getLatestBackupLog",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "log",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "id",
+                "type": "string"
+            }
+        ],
+        "name": "getAllBackupKey",
+        "outputs": [
+            {
+                "internalType": "string[]",
+                "name": "logs",
+                "type": "string[]"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "id",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "curIndex",
+                "type": "uint256"
+            }
+        ],
+        "name": "updateServiceLocation",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "id",
+                "type": "string"
+            }
+        ],
+        "name": "getServiceLocation",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "protocol",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "point",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "port",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    }
+]

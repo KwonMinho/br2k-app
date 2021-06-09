@@ -1,0 +1,22 @@
+{
+  "name": "replication-app",
+  "version": "1.7.4",
+  "description": "service-Replication state & Recovery support framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "kownminho <alsgh458@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "etcd3": "^1.0.1",
+    "express": "^4.17.1",
+    "flatted": "^3.0.4",
+    "function-queue": "0.0.12",
+    "obj-watcher": "^2.0.15",
+    "sleep": "^6.3.0",
+    "web3": "^1.2.11",
+    "webpack": "^4.44.1",
+    "webpack-dev-middleware": "^3.7.2"
+  }
+}

@@ -1,6 +1,6 @@
 {
-  "name": "br2k-app",
-  "version": "1.5.6",
+  "name": "br2k-app-lite",
+  "version": "1.0.0",
   "description": "web server framework with br2k schema",
   "main": "index.js",
   "scripts": {

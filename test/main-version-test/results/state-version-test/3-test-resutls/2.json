@@ -46,7 +46,7 @@
             "location": "http://192.168.205.11"
         }
     ],
-    "etcd-snapshot-size": 751587392,
+    "etcd-snapshot-size": 386077888,
     "service-state-size": 20495403,
     "storage": {
         "host": "203.250.77.152",
