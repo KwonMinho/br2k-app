@@ -1,7 +1,12 @@
 # br2k-app: web server framework with br2k schema
 
-npm install br2k-app-lite
+<img alt="br2k-app with br2k" src="./assets/overview.png"  align="cneter"/>
 
+<br>
+
+**install**: npm install br2k-app-lite
+
+ <br>
  
 # quick-start
 
