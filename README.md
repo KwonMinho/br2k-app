@@ -1,6 +1,6 @@
 # br2k-app: web server framework with br2k schema
 
-npm install br2k-app@1.5.6
+npm install br2k-app-lite
 
  
 # quick-start
