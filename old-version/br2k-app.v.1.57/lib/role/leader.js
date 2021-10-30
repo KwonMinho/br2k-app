@@ -45,7 +45,7 @@ class Leader extends Role {
    */
   replicateRequest(req, res) {
     const method = req.method.toLowerCase();
-    const path = req.originalUrl;
+    const path = req._parsedUrl.pathname;
     const reqType = this._getReqType(method, path);
 
     if (reqType == EXCEPTION.notFoundReqType) {
@@ -209,7 +209,7 @@ class Leader extends Role {
     const req = self.reqPool.get(index);
     const res = self.resPool.get(index);
     const method = req.method.toLowerCase();
-    const path = req.originalUrl;
+    const path = req._parsedUrl.pathname;
     const reqType = self._getReqType(method, path);
     const isEmpty = res == undefined || req == undefined;
     const action = "process request";

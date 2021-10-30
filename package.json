@@ -1,6 +1,6 @@
 {
   "name": "br2k-was",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "description": "web application server framework with br2k schema",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,7 @@
   "author": "kwonminho <alsgh458@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "caver-js": "^1.6.4",
     "compressing": "^1.5.1",
     "etcd3": "^1.0.1",
     "eth-crypto": "^1.9.0",

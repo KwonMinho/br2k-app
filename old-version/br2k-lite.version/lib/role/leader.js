@@ -43,7 +43,7 @@ class Leader extends Role {
    */
   replicateRequest(req, res) {
     const method = req.method.toLowerCase();
-    const path = req.originalUrl;
+    const path = req._parsedUrl.pathname;
     const reqType = this._getRLEType(method, path);
 
     if (reqType == EXCEPTION.notFoundReqType) {

@@ -121,7 +121,7 @@ module.exports = class Service{
     }
 
     const method = req.method.toLowerCase();
-    const path = req.originalUrl;
+    const path = req._parsedUrl.pathname;
     const reqType = this.getReqType(method,path);
 
     if(reqType=='exception'){
@@ -394,7 +394,7 @@ module.exports = class Service{
     let SSI_KEY = scv.SSI_KEY;
     let req = scv.reqPool.get(CUR_INDEX);
     let res = scv.responsePool.get(CUR_INDEX);
-    let reqType = scv.getReqType(req.method.toLowerCase(), req.originalUrl);
+    let reqType = scv.getReqType(req.method.toLowerCase(), req._parsedUrl.pathname);
     let client = scv.processETCD;
     let isNotEmpty = true;
 
@@ -883,7 +883,7 @@ module.exports = class Service{
   /* util */
   findRollbackProcess(req){
     const method = req.method.toLowerCase();
-    const path = req.originalUrl;
+    const path = req._parsedUrl.pathname;
     const rollbackProcess = this.rollbackProcess.get(method+path);
     return rollbackProcess;
   }
@@ -891,7 +891,7 @@ module.exports = class Service{
   /* util */
   findReqProcess(req, reqType){
     const method = req.method.toLowerCase();
-    const path = req.originalUrl;
+    const path = req._parsedUrl.pathname;
 
     if(reqType==REPLICATE){
       return this.replicatingProcess.get(method+path);

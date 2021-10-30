@@ -622,7 +622,7 @@ module.exports = class Role {
    * */
   _findRLEProcess(req){
     const method = req.method;
-    const path = req.originalUrl;
+    const path = req._parsedUrl.pathname;
 
     return {
       method: method,
