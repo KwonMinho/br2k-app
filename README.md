@@ -4,7 +4,7 @@
 # quick-start
 
 ```javascript
-const app = require('br2k-app')(RUNTIME_CONFIG);
+const app = require('br2k-was')(RUNTIME_CONFIG);
 
 /*--default mode--*/
 app.replicate('POST','/user', (req,res)=>{
