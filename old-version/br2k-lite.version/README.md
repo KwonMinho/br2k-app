@@ -1,32 +1,56 @@
 # br2k-app: web server framework with br2k schema
 
+<img alt="br2k-app with br2k" src="./assets/overview.png"  align="cneter"/>
 
+<br>
+
+**install**: npm install br2k-app-lite
+
+ <br>
+ 
 # quick-start
 
 ```javascript
 const app = require('br2k-app')(RUNTIME_CONFIG);
 
-/*--default mode--*/
-app.replicate('POST','/user', (req,res)=>{
-  //process request
-  //return -1 (IF.failed)
+/**
+ * default mode case
+ * */
+app.defineRLE('POST','/user',(req)=>{
+  //define RLE!!
+  return rle
+}).replicate((rle, res)=>{
+    //process request
+    //return -1 (IF.failed)
 });
-app.onlyOnce('GET','/user',(req,res)=>{
+app.defineRLE('GET','/user',(req)=>{
+  //define RLE!!
+  return rle
+}).nonReplicate((rle, res)=>{
   //process request
 });
 
-/*--[special case] rollback mode--*/
-app.replicate('POST', '/user', (req,res)=>{
-  //process request
-  //return -1 (IF.failed) 
-}).backupState(req=>{
+
+/**
+ * rollback mode case
+ * */
+app.defineRLE('POST','/user',(req)=>{
+  //define RLE!!
+  return rle
+}).backupState(rle=>{
   //define state(object)
   return state
+}).replicate((rle, res)=>{
+  //process request
+  //return -1 (IF.failed) 
 }).rollback(state=>{
   //define rollback process with state(object)
 });
 
-app.onlyOnce('GET','/user',(req,res)=>{
+app.defineRLE('GET','/user',(req)=>{
+  //define RLE!!
+  return rle
+}).nonReplicate('GET','/user',(rle,res)=>{
   //process request
   //return -1 (IF.failed) 
 });
@@ -52,17 +76,7 @@ app.onlyOnce('GET','/user',(req,res)=>{
 }
 
 //IF type: 'test', access-perm: {}
-//IF type: 'klaytn', access-perm
-{
-  endpoint: 'klaytn test net access point'
-  account: '0xaB3ffd...xdf',
-  private-key: '???',
-  password: '???',
-  contract: {
-    json-interface-path: , //json file-> content abi --> []
-    addresss: 
-  }
-}
+//IF type: 'klaytn', access-perm: 'not yet implemented'
 
 //IF type: 'ethereum', access-perm
 {
@@ -219,10 +233,10 @@ br2k request object
   }
 
 ```javascript
-app.replicate('POST','/user', (req,res)=>{
-  const subjectID = req.br2k.subject.id
-  const subjectIndex = req.br2k.subject.index;
-  const entryIndex = req.br2k.entryIndex;
+app.replicate('POST','/user', (rle,res)=>{
+  const subjectID = rle.headers.subject.id
+  const subjectIndex = rle.headers.subject.index;
+  const entryIndex = rle.headers.entryIndex;
 });
 ```
 

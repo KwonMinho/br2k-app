@@ -3,7 +3,6 @@ const Role = require("./role");
 const queue = require("function-queue");
 const emptyRes = require("../utils/empty_res");
 const { Etcd3, Range } = require("etcd3");
-const { stringify } = require("flatted");
 const {
   TIME,
   OPREATION,
@@ -18,7 +17,6 @@ const {
   EXCEPTION,
   STATE_DEFAULT
 } = require("../utils/config");
-const { attachment } = require("../utils/empty_res");
 
 
 class Leader extends Role {
@@ -28,7 +26,7 @@ class Leader extends Role {
     this.genFollower = Follower;
 
     this.resPool;
-    this.reqPool;
+    this.rlePool;
     this.storeQ;
     this.processQ;
     this.versionUpLog;
@@ -46,7 +44,7 @@ class Leader extends Role {
   replicateRequest(req, res) {
     const method = req.method.toLowerCase();
     const path = req.originalUrl;
-    const reqType = this._getReqType(method, path);
+    const reqType = this._getRLEType(method, path);
 
     if (reqType == EXCEPTION.notFoundReqType) {
       res.send({
@@ -70,7 +68,7 @@ class Leader extends Role {
     this.storeQ = queue();
     this.processQ = queue();
     this.resPool = new Map();
-    this.reqPool = new Map();
+    this.rlePool = new Map();
     this.putETCDClient = new Etcd3(ETCD_CFG.instanceOption);
     this.curWatchEvent = new Etcd3(ETCD_CFG.instanceOption);
     this.etcdClient = new Etcd3(ETCD_CFG.instanceOption);
@@ -82,9 +80,8 @@ class Leader extends Role {
    */
   async _startRegisterRole() {
     this.logger.log('info','register','transition role', 'start');
-
     this.curRole = ROLE.register;
-    this.checkRoleIntance = setInterval(this._checkRole, TIME.follwing_INTERVAL, this);
+    this.checkRoleIntance = setInterval(this._checkRole, TIME.chekcRole, this);
     await this.putETCDClient.put(ETCD_KEY.curLeader).value(this.scvID);
     const isUncompletion = await this._completionCheck();
 
@@ -160,19 +157,24 @@ class Leader extends Role {
       return;
     }
 
-    req.br2k = {
+    const infoRLE = self._findRLEProcess(req);
+
+    const rle = await infoRLE.maker(req);
+    rle.header = {
       entryIndex: index,
+      method: infoRLE.method,
+      path: infoRLE.path,
       subject: {
         id: self.scvID,
         index: self.scvIndex
       }
-    }
+    };
 
+    self.rlePool.set(index, rle);
     self.resPool.set(index, res);
-    self.reqPool.set(index, req);
 
     try {
-      const entry = await stringify(req);
+      const entry = await JSON.stringify(rle);
       const txn = await ec
         .if(ETCD_KEY.curLeader, "Value", "==", self.scvID)
         .then(
@@ -206,27 +208,27 @@ class Leader extends Role {
     const index = info.index;
     const self = info.self;
     const curRESKey = ETCD_KEY.res + index;
-    const req = self.reqPool.get(index);
+    const rle = self.rlePool.get(index);
     const res = self.resPool.get(index);
-    const method = req.method.toLowerCase();
-    const path = req.originalUrl;
-    const reqType = self._getReqType(method, path);
-    const isEmpty = res == undefined || req == undefined;
+    const method = rle.header.method.toLowerCase();
+    const path = rle.header.path;
+    const rleType = self._getRLEType(method, path);
+    const isEmpty = res == undefined || rle == undefined;
     const action = "process request";
 
     const logInfo = ['info','leader','action: process request'];
     const logError = ['error','leader','action: process request'];
 
-    /* 0. check empty req,res */
+    /* 0. check empty rle,res */
     self._lockAction();
     self.logger.log(...logInfo, `start: ${index}`);
     if (isEmpty) {
-      self.logger.log(...logError, `[not found req,res instance]: ${index}`);
+      self.logger.log(...logError, `[not found rle,res instance]: ${index}`);
 
       const result = await self._updateRES(
         'leader',
         curRESKey,
-        reqType + RES_STATE.failed,
+        rleType + RES_STATE.failed,
         index
       );
 
@@ -241,7 +243,7 @@ class Leader extends Role {
     } /*END-POINT*/
 
     /* main action content */
-    if (reqType == RES_TYPE.excetion_TXN) {
+    if (rleType == RES_TYPE.excetion_TXN) {
       self.logger.log(...logInfo, `Exception-TXN: ${index}`);
       res.send(SCV_MSG.successPutExtenalTxn);
       self._delPoolsInstance(index);
@@ -249,10 +251,10 @@ class Leader extends Role {
       /* fix*/
       if (self._isRollbackMode()) {
         self.logger.log(...logInfo, `rollback mode:stored current state in local`);
-        await self._storedState(req);
+        await self._storedState(rle);
       }
       /* step.1 inprocess */
-      const ipstate = reqType + RES_STATE.inProcess + self.scvID;
+      const ipstate = rleType + RES_STATE.inProcess + self.scvID;
       const result = await self._updateRES('leader',curRESKey, ipstate, index);
       self.logger.log(...logInfo, `request state -> Inprocess: ${index}`);
 
@@ -268,12 +270,12 @@ class Leader extends Role {
       /* step.3.2 unsafe state to safe state */
       const psResult = await self._startProcessing(
         ['leader',action],
-        req,
+        rle,
         res,
-        reqType,
+        rleType,
         index
       );
-      await self._commitRES(curRESKey, reqType + psResult);
+      await self._commitRES(curRESKey, rleType + psResult);
       self._delPoolsInstance(index);
     }
     /* step. 4,5 increase LPI,SSI */
@@ -378,7 +380,7 @@ class Leader extends Role {
         });
         this.logger.log('info','leader','service-state-version up','healthy follower: ' + member.ID);
       } catch (e) {
-        console.log(e)
+        console.log(e);
         this.logger.log('info','leader','service-state-version up','unhealthy follower: ' + member.ID);
       }
     }
@@ -535,6 +537,7 @@ class Leader extends Role {
   /**
    * @protected
    * @override
+   * @param {object} currentRole
    */
   async _transition() {
     await this._clear();
@@ -592,6 +595,8 @@ class Leader extends Role {
 
     const logInfo = ['info','leader','action: prepare service'];
     const logError = ['error','leader','action: prepare service'];
+    const action = "prepare service";
+
 
     /*1. get Log size in ETCD*/
     this.logger.log(...logInfo,'start');
@@ -609,13 +614,16 @@ class Leader extends Role {
         await this._prepareService();
         return;
       }
-      const reqType = curRES[0];
-      const reqState = curRES[1];
+      const rleType = curRES[0];
+      const rleState = curRES[1];
 
       /*3.1-NULL_STATE or INPROCESS*/
-      if (this._isIgnoreState(reqState)) {
-        let state = reqType + RES_STATE.ignore;
-        if (reqState == RES_STATE.inProcess) state = state + curRES[2];
+      if (this._isIgnoreState(rleState)) {
+        let state = rleType + RES_STATE.ignore;
+        if (rleState == RES_STATE.inProcess){
+          const oldLeaderID = this._extractScvID(curRES);
+          state = state + oldLeaderID
+        }
         const result = await this._updateRES('register',curRESKey, state,index);
 
         if (this._isNotCurLeader(result)) {
@@ -628,23 +636,23 @@ class Leader extends Role {
       }
 
       /*3.2-Replication, SUCCESS*/
-      if (this._isFollowingRequest(reqType, reqState)) {
-        const req = await this._getRequest(index);
-        if (this._isFailedOperaion(req)) {
+      if (this._isFollowingRequest(rleType, rleState)) {
+        const rle = await this._getRLE(index);
+        if (this._isFailedOperaion(rle)) {
           this.logger.log(...logError,`failed to get request:${index}`);
           this._wait();
           this._prepareService();
           return;
         }
         if (this._isRollbackMode()) {
-          await this._storedState(req);
+          await this._storedState(rle);
         }
 
         const pResult = await this._startProcessing(
           ['leader',action],
-          req,
+          rle,
           emptyRes,
-          reqType,
+          rleType,
           index
         );
         if (this._isFailedOperaion(pResult)) {
@@ -673,7 +681,7 @@ class Leader extends Role {
     this.storeQ.removeAllObjects();
     this.processQ.removeAllObjects();
 
-    this.reqPool.clear();
+    this.rlePool.clear();
     this.resPool.clear();
   }
 
@@ -683,17 +691,17 @@ class Leader extends Role {
    * @param {string} index: request entry index
    */
   _delPoolsInstance(index) {
-    this.reqPool.delete(index);
+    this.rlePool.delete(index);
     this.resPool.delete(index);
   }
 
   /**
    * @util
    * @protected
-   * @param {number} reqState
+   * @param {number} rleState
    */
-  _isIgnoreState(reqState) {
-    return reqState == RES_STATE.null || reqState == RES_STATE.inProcess;
+  _isIgnoreState(rleState) {
+    return rleState == RES_STATE.null || rleState == RES_STATE.inProcess;
   }
 
   /**
@@ -703,16 +711,15 @@ class Leader extends Role {
    * @param {string} path: RESTful API path
    * @returns {string} replication, non-replication, exception
    */
-  _getReqType(method, path) {
+  _getRLEType(method, path) {
     if (path == RES_TYPE.excetion_TXN_PATH) return RES_TYPE.excetion_TXN;
 
     const key = method + path;
-
     const rp = this.routers.replication.get(key);
     if (rp != undefined) return RES_TYPE.replication;
 
-    const nrp = this.routers.onlyOnce.get(key);
-    if (nrp != undefined) return RES_TYPE.onlyOnce;
+    const nrp = this.routers.nonReplication.get(key);
+    if (nrp != undefined) return RES_TYPE.nonReplication;
 
     return EXCEPTION.notFoundReqType;
   }

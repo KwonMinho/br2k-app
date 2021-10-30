@@ -66,7 +66,7 @@ module.exports =class Follower extends Role {
           await self._storedState(req);
         }
         
-        const req = await self._getRequest(index);
+        const req = await self._getRLE(index);
         if (self._isFailedOperaion(req)) {
           self.logger.log(...logError,`get current request ${index}`);
           return;
@@ -144,8 +144,7 @@ module.exports =class Follower extends Role {
       self.logger.log('info','follower','load latest state', 'successful!!');
       self.logger.log('info','follower','start role', 'successful');
       self.root = root;
-      self._startRole();
-      self.checkRoleIntance = setInterval(self._checkRole, TIME.follwing_INTERVAL, self);
+      await self._startRole();
     }
   }
 
@@ -200,7 +199,7 @@ module.exports =class Follower extends Role {
       this.logger.set(this.statePath, this.scvID);
       this.logger.log('info','follower','check etcd & init scv-id', 'successful');
     } catch (e) {
-      console.log(e)
+      console.log(e);
       this.logger.log('error','follower','check etcd & init scv-id', 'failed');
       this._wait();
       this.checkMyEtcd();
@@ -217,15 +216,16 @@ module.exports =class Follower extends Role {
   /**
    * @protected
    * */
-  async _startRole() {
+  async _startRole(isRestart=false) {
     this.logger.log('info','follower','transition role','start');
     const isUncompletion = await this._completionCheck();
     this.logger.log('info','follower','action: completion of processed request','check');
-    if (!isUncompletion) {
+    if (isUncompletion && !isRestart) {
       this.logger.log('info','follower','action: completion of processed request','service state consistency may be broken in BR2K service');
       await this._followerRecoveryState();
     } else {
       this.logger.log('info','follower','following action','start');
+      this.checkRoleIntance = setInterval(this._checkRole, TIME.chekcRole, this);
       await this._loopingFollowingState();
     }
   }
@@ -233,17 +233,17 @@ module.exports =class Follower extends Role {
   /**
    * @protected
    * @override
+   * @param {object} currentRole
    */
-  async _transition() {
+  async _transition(currentRole) {
     await this._clear();
-
     if (this._isRunnigAction()) {
       this.logger.log('info','follower->register(leader)','transition role','waiting for action in previous role to finish');
       this.isWaitTransition = true;
       setTimeout(
         (self) => {
           if (self.isWaitTransition == true) {
-            self._transition(); /*retry...*/
+            self._transition(self); /*retry...*/
           }
         },
         TIME.retryTransition,
@@ -301,7 +301,8 @@ module.exports =class Follower extends Role {
    * @override
    */
   async _retryStartRole() {
-    this._loopingFollowingState();
+    //fix
+    this._startRole(true);
   }
 
   /**

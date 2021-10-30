@@ -39,6 +39,15 @@ module.exports = class Service {
     this.roleObj.replicateRequest(req, res);
   }
 
+  /** 
+   * @public
+   * @param {object} process
+   * */
+  setRLE(process) {
+    this.roleObj.setRLE(process);
+  }
+
+
   /**
    * @public
    * @param {boolean} isReplicate

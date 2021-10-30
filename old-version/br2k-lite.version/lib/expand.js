@@ -27,20 +27,40 @@ exports = module.exports = function (app, config) {
     storeReqMiddleWare
   );
 
-
-
-  /*Replication(Stateful) Request Router */
-  app.replicate = function (method, path, cb) {
-    app.all(path, () => {});
+  app.defineRLE = function(method, path, cb){
+    app.all(path, ()=>{});
     const processPath = method.toLowerCase() + path;
-
-    app.scv.setRouting(true, {
+    app.scv.setRLE({
       path: processPath,
-      cb: cb,
+      cb: cb
     });
 
+    let isReplicate = false;
     const service = {
+      /*Stateful(Replication) Request Router*/
+      replicate: (cb) => {
+        isReplicate = true;
+        app.scv.setRouting(true, {
+          path: processPath,
+          cb: cb,
+        });
+    
+        return this;
+      },
+      /*Stateless Request Router*/
+      nonReplicate: (cb) => {
+        if(isReplicate){
+          console.log('The request has already been determined as a replicate type..(replicate, backupState, rollback func)');
+          process.exit(1);
+        }
+        app.scv.setRouting(false, {
+          path: processPath,
+          cb: cb,
+        });
+        return this;
+      },
       backupState: (cb) => {
+        isReplicate = true;
         app.scv.setBackUpState({
           path: processPath,
           cb: cb,
@@ -48,26 +68,17 @@ exports = module.exports = function (app, config) {
         return this;
       },
       rollback: (cb) => {
+        isReplicate = true;
         app.scv.setRollbacks({
           path: processPath,
           cb: cb,
         });
         return this;
       },
-    };
-
+    }
     return service;
-  };
+  }
 
-  /*Stateless Request Router */
-  app.onlyOnce = function (method, path, cb) {
-    app.all(path, () => {});
-    const processPath = method.toLowerCase() + path;
-    app.scv.setRouting(false, {
-      path: processPath,
-      cb: cb,
-    });
-  };
 
   /*External_TXN Request*/
   app.all(FIX_PATH.external_success_txn, () => {});

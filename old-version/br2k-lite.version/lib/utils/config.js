@@ -31,7 +31,7 @@ const RES_STATE = {
 
 const RES_TYPE = {
   replication: "R",
-  onlyOnce: "O",
+  nonReplication: "N",
   excetion_TXN: "T",
 };
 
@@ -82,6 +82,7 @@ const OPREATION = {
 };
 const TIME = {
   follwing: 1,
+  chekcRole: 1,
   retryTransition: 10000,
   retryOperation: 2,
 };
