@@ -30,6 +30,18 @@ app.onlyOnce('GET','/user',(req,res)=>{
   //process request
   //return -1 (IF.failed) 
 });
+
+/*--multi request mode--*/
+// ex) replication reqeust + onlyOnce request
+app.replicate('POST','/user', (req,res)=>{
+  if(app.isLeader(req){
+    //here!!: replicate request area
+  }else{
+    //here!!: onlyOnce request area
+  }
+  //process request
+  //return -1 (IF.failed)
+});
 ```
 
 # runtime-configuration
