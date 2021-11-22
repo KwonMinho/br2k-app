@@ -1,6 +1,6 @@
 {
   "name": "br2k-was",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "web application server framework with br2k schema",
   "main": "index.js",
   "scripts": {
