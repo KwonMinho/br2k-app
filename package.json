@@ -1,7 +1,7 @@
 {
   "name": "br2k-was",
-  "version": "0.1.0",
-  "description": "web application server framework with br2k schema",
+  "version": "0.1.6",
+  "description": "Replicaiton framework for blockchain application service",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,10 +9,10 @@
   "author": "kwonminho <alsgh458@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "caver-js": "^1.6.4",
+    "caver-js": "^1.5.0",
     "compressing": "^1.5.1",
     "etcd3": "^1.0.1",
-    "eth-crypto": "^1.9.0",
+    "eth-crypto": "^2.1.0",
     "express": "^4.17.1",
     "flatted": "^3.0.4",
     "function-queue": "0.0.12",

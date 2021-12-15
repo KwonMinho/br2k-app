@@ -1,16 +1,35 @@
-# br2k-was: web server framework with br2k schema
+# logo[replace]
 
+[] https://github.com/pinpoint-apm/pinpoint
+
+Replicaiton framework for blockchain application service
+
+# About br2k-was
+-desc
+
+
+-goal
+
+- visiaulizaition png 
+  
 
 # quick-start
 
+```bash
+cd YOUR_SERVER_PROJECT
+npm install br2k-was
+```
+
+server.js
 ```javascript
 const app = require('br2k-was')(RUNTIME_CONFIG);
 
 /*--default mode--*/
 app.replicate('POST','/user', (req,res)=>{
-  //process request
+  //request process
   //return -1 (IF.failed)
 });
+
 app.onlyOnce('GET','/user',(req,res)=>{
   //process request
 });
@@ -43,6 +62,14 @@ app.replicate('POST','/user', (req,res)=>{
   //return -1 (IF.failed)
 });
 ```
+
+
+# Overview
+-express github
+
+# Supported Modules
+
+
 
 # runtime-configuration
 
@@ -247,6 +274,10 @@ The permission of all files in state folder must be 766
 ```
 chmod -R 766 PROJECT_ROOT_PATH/state
 ```
+
+# related paper
+
+br2k link
 
 
 # dev-env
