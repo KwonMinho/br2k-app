@@ -1,0 +1,21 @@
+{
+  "name": "test.br2k",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "br2k-was": "^0.1.4",
+    "chance": "^1.1.8",
+    "sleep": "^6.3.0"
+  }
+}
