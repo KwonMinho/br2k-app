@@ -1,6 +1,6 @@
 {
   "name": "br2k-was",
-  "version": "0.1.6",
+  "version": "0.2.2",
   "description": "Replicaiton framework for blockchain application service",
   "main": "index.js",
   "scripts": {
