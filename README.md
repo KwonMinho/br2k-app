@@ -1,8 +1,8 @@
-<img src=./assets/br2k-was-logo.png>
+<br>
 
+<img src=./assets/br2k-was-logo.png>
 Replication-framework for replicating a blockchain web application service server.
 
-<br>
 
 # About
 
