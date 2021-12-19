@@ -1,89 +1,110 @@
-# logo[replace]
+<img src=./assets/br2k-was-logo.png>
 
-[] https://github.com/pinpoint-apm/pinpoint
+Replication-framework for replicating a blockchain web application service server.
 
-Replicaiton framework for blockchain application service
+<br>
 
-# About br2k-was
--desc
+# About
 
+**`br2k-was`** is a framework for easily applying <a href='https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART002639420'> BR2K technique </a> that ensure the robustness of blockchain application services.
 
--goal
+The _BR2K_ technique supports blockchain application services to continuously provide services to users through a recovery method that supports replication of services and quick restart for service failures.
 
-- visiaulizaition png 
-  
+<br>
 
-# quick-start
+<img src=./assets/br2k-service.png width=50% height=50%>
+<h5> [BR2K-service: Blockchain web application server replicated using BR2K-was] </h5>
+
+<br>
+
+# Features
+
+- Robustness
+- Replication for high availability
+- Focus on strong consistency (using ETCD)
+- Support lite version
+
+<br>
+
+# Quick start
 
 ```bash
+npm install -g br2k-cli
 cd YOUR_SERVER_PROJECT
-npm install br2k-was
+br2k init
+vim server.js
 ```
 
-server.js
-```javascript
-const app = require('br2k-was')(RUNTIME_CONFIG);
+### Server.js
 
-/*--default mode--*/
-app.replicate('POST','/user', (req,res)=>{
-  //request process
-  //return -1 (IF.failed)
+```js
+const port = 3000;
+const app = require("br2k-was")(RUNTIME_CONFIG); //RUNTIME_CONFIG는 아래 참조
+
+app.replicate("POST", "/user", (req, res) => {
+  // Handling of user requests that need to be replicated
+  // If it fails, return -1.
 });
 
-app.onlyOnce('GET','/user',(req,res)=>{
-  //process request
+app.onlyOnce("GET", "/user", (req, res) => {
+  // Handling of user requests that must be executed only once.
+  // If it fails, return -1.
 });
 
-/*--[special case] rollback mode--*/
-app.replicate('POST', '/user', (req,res)=>{
-  //process request
-  //return -1 (IF.failed) 
-}).backupState(req=>{
-  //define state(object)
-  return state
-}).rollback(state=>{
-  //define rollback process with state(object)
-});
-
-app.onlyOnce('GET','/user',(req,res)=>{
-  //process request
-  //return -1 (IF.failed) 
-});
-
-/*--multi request mode--*/
-// ex) replication reqeust + onlyOnce request
-app.replicate('POST','/user', (req,res)=>{
-  if(app.isLeader(req){
-    //here!!: replicate request area
-  }else{
-    //here!!: onlyOnce request area
-  }
-  //process request
-  //return -1 (IF.failed)
+app.listen(port, () => {
+  console.log(`Example br2k server listening at ${port}`);
 });
 ```
 
+### Lite-version-server.js
 
-# Overview
--express github
+```js
+const port = 3000;
+const app = require("br2k-was")(RUNTIME_CONFIG); //RUNTIME_CONFIG는 아래 참조
 
-# Supported Modules
+app
+  .replicate("POST", "/user", (req, res) => {
+    // Handling of user requests that need to be replicated
+    // If it fails, return -1.
+  })
+  .backupState((req) => {
+    // Define the state required for rollback operation about processing the request.
+    return state;
+  })
+  .rollback((state) => {
+    // Define the rollback operation
+  });
 
+app.onlyOnce("GET", "/user", (req, res) => {
+  // Handling of user requests that must be executed only once.
+  // If it fails, return -1.
+});
+```
 
+<br>
 
-# runtime-configuration
+# Implementations related to the br2k technique
 
-```javascript
+- <a href=https://github.com/KwonMinho/br2k-was>br2k-was</a>
+- <a href=https://github.com/KwonMinho/br2k-cli>br2k-cli</a>
+- <a href=https://github.com/KwonMinho/service-registry>service-Registry</a>
+- <a href=https://github.com/KwonMinho/br2k-watch>br2k-watch</a>
+
+<br>
+
+# Runtime Configuration
+
+```js
 {
-  service-registry (obj),
-  webpack-config (obj),
-  state-config (obj)
+  "service-registry"(obj), "webpack-config"(obj), "state-config"(obj);
 }
 ```
 
+<br>
+
 ### service-registry
 
-```javascript
+```js
 {
   type: 'ethereum' or 'klaytn' or 'test'
   id: 'service-id',
@@ -99,7 +120,7 @@ app.replicate('POST','/user', (req,res)=>{
   password: '???',
   contract: {
     json-interface-path: , //json file-> content abi --> []
-    addresss: 
+    addresss:
   }
 }
 
@@ -111,10 +132,12 @@ app.replicate('POST','/user', (req,res)=>{
   password: '???',
   contract: {
     json-interface-path: , //json file-> content abi --> []
-    addresss: 
+    addresss:
   }
 }
 ```
+
+<br>
 
 ### state-config
 
@@ -136,11 +159,11 @@ app.replicate('POST','/user', (req,res)=>{
 
 </br></br>
 
-# backup storage: mysql
+# Backup Storage-Mysql
 
 ## backup-log format in service registry
 
-```javascript
+```js
 {
     "start": "",
     "end": "",
@@ -179,7 +202,11 @@ app.replicate('POST','/user', (req,res)=>{
 }
 ```
 
-## Setting
+<br>
+
+## Mysql Setting
+
+<br>
 
 ### 1. Run mysql db in docker
 
@@ -189,10 +216,12 @@ docker run --name mysql-db -v /tmp/myown/mysql:/var/lib/mysql -e MYSQL_ROOT_PASS
 ```
 
 ### 2. create tables
-```
+
+```bash
 mysql ---password=ROOT_PASSWORD
 ```
-```
+
+```bash
 mysql> use backup;
 
 mysql>
@@ -239,35 +268,20 @@ ALTER TABLE snapshot
 
 ### Error: ER_NOT_SUPPORTED_AUTH_MODE
 
-Node.js의 Express에서 mysql미들웨어를 이용해서 원격연결
-
-```
+```bash
 mysql> use mysql;
 
 mysql> alter user 'userName'@'%' identified with mysql_native_password by 'userPassword';
 
 mysql> FLUSH PRIVILEGES;
-
-```
-# br2k request info
-
-br2k request object 
-- entryIndex:
-- subject: {
-    id, index
-  }
-
-```javascript
-app.replicate('POST','/user', (req,res)=>{
-  const subjectID = req.br2k.subject.id
-  const subjectIndex = req.br2k.subject.index;
-  const entryIndex = req.br2k.entryIndex;
-});
 ```
 
-# check list
+<br>
+
+# Deev Dive
 
 ## 1. State folder permission
+
 <br>
 The permission of all files in state folder must be 766
 
@@ -275,12 +289,34 @@ The permission of all files in state folder must be 766
 chmod -R 766 PROJECT_ROOT_PATH/state
 ```
 
-# related paper
+## 2. Multiple Type Request
 
-br2k link
+```js
+// ex) replication reqeust + onlyOnce request
+app.replicate('POST','/user', (req,res)=>{
+if(app.isLeader(req){
+//here!!: replicate request area
+}else{
+//here!!: onlyOnce request area
+}
+//process request
+//return -1 (IF.failed)
+});
+```
 
+## 3. br2k meta info included in user request
 
-# dev-env
+```js
+app.replicate("POST", "/user", (req, res) => {
+  const subjectID = req.br2k.subject.id;
+  const subjectIndex = req.br2k.subject.index;
+  const entryIndex = req.br2k.entryIndex;
+});
+```
+
+<br>
+
+# Dependencies
 
 nodejs: v14.15.3
 
@@ -289,6 +325,8 @@ npm: 7.10.0
 etcd: v3.2
 
 core npm modules:
+
 - express: 4.17.1
 - web3: 1.3.6 //ethereum client
+- caver-js: 1.5.0 //klaytn client
 - etcd3: 1.0.1
