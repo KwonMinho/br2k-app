@@ -4,7 +4,7 @@
 Replication-framework for replicating a blockchain web application service server.
 
 
-# About
+# :turtle: About
 
 **`br2k-was`** is a framework for easily applying <a href='https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART002639420'> BR2K technique </a> that ensure the robustness of blockchain application services.
 
@@ -17,7 +17,7 @@ The _BR2K_ technique supports blockchain application services to continuously pr
 
 <br>
 
-# Features
+# :turtle: Features
 
 - Robustness
 - Replication for high availability
@@ -26,7 +26,7 @@ The _BR2K_ technique supports blockchain application services to continuously pr
 
 <br>
 
-# Quick start
+# :turtle: Quick start
 
 ```bash
 npm install -g br2k-cli
@@ -83,7 +83,7 @@ app.onlyOnce("GET", "/user", (req, res) => {
 
 <br>
 
-# Implementations related to the br2k technique
+# :turtle: Implementations related to the br2k technique
 
 - <a href=https://github.com/KwonMinho/br2k-was>br2k-was</a>
 - <a href=https://github.com/KwonMinho/br2k-cli>br2k-cli</a>
@@ -92,7 +92,7 @@ app.onlyOnce("GET", "/user", (req, res) => {
 
 <br>
 
-# Runtime Configuration
+# :turtle: Runtime Configuration
 
 ```js
 {
@@ -159,7 +159,7 @@ app.onlyOnce("GET", "/user", (req, res) => {
 
 </br></br>
 
-# Backup Storage-Mysql
+# :turtle: Backup Storage-Mysql
 
 ## backup-log format in service registry
 
@@ -278,7 +278,7 @@ mysql> FLUSH PRIVILEGES;
 
 <br>
 
-# Deev Dive
+# :turtle: Deev Dive
 
 ## 1. State folder permission
 
@@ -316,7 +316,7 @@ app.replicate("POST", "/user", (req, res) => {
 
 <br>
 
-# Dependencies
+# :turtle: Dependencies
 
 nodejs: v14.15.3
 
