@@ -1,14 +1,14 @@
 <br>
 
 <img src=./assets/br2k-was-logo.png>
-Replication-framework for replicating a blockchain web application service server.
+Replication-framework for replicating a blockchain web application service server
 
 
 # :turtle: About
 
-**`br2k-was`** is a framework for easily applying <a href='https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART002639420'> BR2K technique </a> that ensure the robustness of blockchain application services.
+**`br2k-was`** is a framework for easily applying <a href='https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART002639420'> BR2K technique </a> that ensure the robustness of blockchain application services
 
-The _BR2K_ technique supports blockchain application services to continuously provide services to users through a recovery method that supports replication of services and quick restart for service failures.
+The _BR2K_ technique supports blockchain application services to continuously provide services to users through a recovery method that supports replication of services and quick restart for service failures
 
 <br>
 
