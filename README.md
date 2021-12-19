@@ -20,7 +20,7 @@ The _BR2K_ technique supports blockchain application services to continuously pr
 # :turtle: Features
 
 - Robustness
-- Replication for high availability
+- Fast replication for high availability
 - Focus on strong consistency (using ETCD)
 - Support lite version
 
