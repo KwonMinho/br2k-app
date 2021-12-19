@@ -278,7 +278,7 @@ mysql> FLUSH PRIVILEGES;
 
 <br>
 
-# :turtle: Deev Dive
+# :turtle: Detail
 
 ## 1. State folder permission
 
